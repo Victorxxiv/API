@@ -1,7 +1,12 @@
 import requests
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # API key from OpenWeather
-API_KEY = '76b624388d75ae734318a1cb25064beb'
+API_KEY = os.getenv('API_KEY')
 BASE_URL = 'http://api.openweathermap.org/data/2.5/weather'
 
 

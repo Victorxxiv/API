@@ -12,6 +12,16 @@ BASE_URL = 'http://api.openweathermap.org/data/2.5/weather'
 
 # City name
 def get_weather(city_name):
+    """
+    Fetch the weather data for a given city using the OpenWeather API.
+
+    Args:
+        city_name (str): The name of the city to fetch the weather for.
+
+    Returns:
+        dict: A dictionary containing weather data if successful, 
+              or an error message if the city is not found.
+    """
     # API URL
     params = {
         'q': city_name,  # 'q' query parameter for city name

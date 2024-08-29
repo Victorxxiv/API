@@ -14,7 +14,7 @@ def get_weather(city_name):
         'units': 'metric'  # For temperature in Celsius
     }
     try:
-        response = requests.get(BASE_URL, params=params, timeout=10)  # Added timeout
+        response = requests.get(BASE_URL, params=params, timeout=10)  # timeout
 
         if response.status_code == 200:
             data = response.json()

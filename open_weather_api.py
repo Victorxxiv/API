@@ -13,20 +13,24 @@ def get_weather(city_name):
         'appid': API_KEY,  # 'appid' query parameter for API key
         'units': 'metric'  # For temperature in Celsius
     }
-    response = requests.get(BASE_URL, params=params)
+    try:
+        response = requests.get(BASE_URL, params=params, timeout=10)  # Added timeout
 
-    if response.status_code == 200:
-        data = response.json()
-        weather = {
-            'city': data['name'],
-            'temperature': data['main']['temp'],
-            'description': data['weather'][0]['description'],
-            'humidity': data['main']['humidity'],
-            'wind_speed': data['wind']['speed'],
-        }
-        return weather
-    else:
+        if response.status_code == 200:
+            data = response.json()
+            weather = {
+                'city': data['name'],
+                'temperature': data['main']['temp'],
+                'description': data['weather'][0]['description'],
+                'humidity': data['main']['humidity'],
+                'wind_speed': data['wind']['speed'],
+                }
+            return weather
+
         return {'error': f"City {city_name} not found."}
+
+    except requests.RequestException as e:
+        return {'error': f"An error occurred: {e}"}
 
 
 if __name__ == '__main__':

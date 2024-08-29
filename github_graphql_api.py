@@ -1,11 +1,17 @@
 import requests
+from dotenv import load_dotenv
+import os
+
+# Load environment veraibles from .env file
+load_dotenv()
 
 API_URL = 'https://api.github.com/graphql'
-TOKEN = 'your_github_token'
+TOKEN = os.getenv('TOKEN')
 
 headers = {"Authorization": f"Bearer {TOKEN}"}
 
-def fetch_repositories(username):
+
+def fetch_repositories(user_login):
     query = """
     query($login: String!) {
         user(login: $login) {
@@ -20,10 +26,21 @@ def fetch_repositories(username):
         }
     }
     """
-    variables = {"login": username}
-    response = requests.post(API_URL, json={"query": query, "variables": variables}. headers=headers)
+    variables = {"login": user_login}
+    response = requests.post(API_URL, json={"query": query, "variables": variables}, headers=headers)
     if response.status_code == 200:
         return response.json()['data']['user']['repositories']['nodes']
     else:
-        raise Exception(f"Query failed with status code")
-    
+        raise Exception(f"Query failed with status code\
+                        {response.status_code}: {response.text}")
+
+
+if __name__ == '__main__':
+    user_input = input("Enter GitHub username: ")
+    try:
+        repos = fetch_repositories(user_input)
+        for repo in repos:
+            print(f"Repo: {repo['name']},\
+                  Stars: {repo['stargazerCount']}, URL: {repo['url']}")
+    except Exception as e:
+        print(e)
